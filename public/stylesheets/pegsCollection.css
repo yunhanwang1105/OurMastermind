@@ -1,0 +1,49 @@
+.item {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    margin: 2px;
+  }
+  .red {
+      background-color: #fd3535;
+  }
+  
+  .orange {
+    background-color:#ff8700;
+  }
+
+  .yellow {
+    background-color: #fafa05;
+  }
+
+  .green {
+      background-color: #83f000;
+  }
+
+  .blue {
+    background-color: #4c6ef5;
+  }
+
+  .purple {
+      background-color: #c900ff;
+  }
+  
+  .history,
+  .items,
+  .current-selection {
+    display: flex;
+  }
+  
+  .keyPegs {
+    width: 15px;
+    height: 15px;
+    border-radius: 7.5px;
+    margin: 1px;
+  }
+  .half {
+    background-color: black;
+  }
+  
+  .full {
+    background-color: red;
+  }

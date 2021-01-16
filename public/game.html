@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Game Ongoing...</title>
+    <link href="stylesheets\pegsCollection.css" rel="stylesheet" />
+  </head>
+  <body>
+    <h1>Choose color</h1>
+    <div class="items">
+      <div class= "item red"></div>
+      <div class="item blue"></div>
+      <div class="item yellow"></div>
+      <div class="item orange"></div>
+      <div class="item green"></div>
+      <div class="item purple"></div>
+    </div>
+    <h1>Current selection:</h1>
+    <div class="current-selection"></div>
+    <input id="reset" type="button" value="Reset" onclick="resetChoices();" />
+    <input id="makeGuess" type="button" value="Guess" onclick="checkTheGuesses();" />
+    <input id="newGames" type="button" value="Play again" onclick="playAgain();" />
+    <p id='suggestions'></p>
+    <h1>History: (red = match color & position, black = match color)</h1>
+    <div class="history"></div>
+
+    <h2>Scoreboard</h2>
+    <div class="scoreboard">
+      <div id="player1Win"></div>
+      <div id="player2Win"></div>
+    </div>
+  </body>
+
+  <script src="javascripts\game.js"></script>
+</html>

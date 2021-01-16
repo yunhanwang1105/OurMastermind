@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Game">
+    <meta name="description" content="Game">
+    <meta name="author" content="CSE1 10">
+    <title>Strange Mastermind</title>
+    <!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <!-- Here is our main header that is used across all the pages of our website -->
+    <!-- <img src="https://images.daznservices.com/di/library/sporting_news/2f/d8/global-chess-033020-ftr_hvma1haqqy1h1sfy5ue76hi1a.jpg?t=790861473&quality=100"> -->
+    <header>
+      <h1>Mastermind</h1>
+    <nav>
+      <ul>
+        <li><a href="#rules">Rules</a></li>
+        <li><a href="#faqs">FAQ</a></li>
+      </ul>
+     </nav>
+    </header>
+
+    <!-- Here is our page's main content -->
+    <main>
+      <!-- Stat -->
+      <div class="index-info-item">
+        <p class="index-info-item">
+          <span class="index-info-item-counter">
+            0
+          </span>
+
+          Games Today
+        </p>
+
+        <p class="index-info-item">
+          <span class="index-info-item-counter">
+            0
+          </span>
+
+          Playing Now
+        </p>
+      </div>
+      
+      <section id="right">
+        <form action="/play" method="get">
+          <button type="submit">PLAY</button>
+        </form>
+    </section>
+
+      <!-- It contains an article -->
+      <article>
+        <h2>Play online with your friends, compete with strangers!</h2>
+
+        <p>Getting bored? Don't worry, you are more than welcomed to play here!
+          We only offer Mastermind so far, more games are in development... But not guarenteed&#128517;
+        </p>
+
+        <div id='rules'><h2>How to play</h2></div>
+        <b>Don't worry if you don't fully understand the rules. Once you start a game, we will provide guides that should
+            be easily to follow. (starter friendly)</b>
+
+        <p>The game is played using:
+          <ol>
+            <li>Wait for the code setter set the code. (Setter will have 60 secs to set the code.)</li>
+            <li>Code guesser now need to take a guess. Make the guess by clicking on a colour. The'undo' button will remove the most 
+                recent colour you clicked.</li>
+            <li>Code setter now responds to the given guess by putting key pegs. 
+                <ul>
+                    <li>One black key peg means the guesser has one correct colour in right position.</li>
+                    <li>One white key peg means the guesser has one colour correct but no in right position.</li>
+                    <li>If nothing is placed on a key peg position, the guesser then has a wrong colour. </li>
+                </ul>
+                Notice: The orders don't matter, they only reflects how many correct/incorrect/partially correct 
+                colours are there! If there is no pegs, means that one colour is not part of the code.
+                We've designed a logic, if the setter gives incorrect responses, a notification will rise.
+            </li>
+            <li>Guesser makes the next guess, based on what feedback (s)he received. Step 2-4 are repeated until the game ends.</li>
+            <li>Game End Conditions:
+                <ul>
+                    <li>Turns > 10.</li>
+                    <li>One player takes too long when it's his/her turn.</li>
+                    <li>The guesser worked out the code.</li>
+                </ul>
+            </li>
+          </ol>
+        </p>
+      </article>
+
+      <!-- the aside content can also be nested within the main content -->
+      <aside>
+        <div id='faqs'>
+        <h2>FAQS</h2>
+        <ul>
+          <li>
+            <h4>How is the average waiting time calculated?</h4>
+            <p>The average time taken for players to be assigned to a match, if you waited for 5 minutes or more and still didn't find a
+               match, we will decline your request automatically,  you could start looking for a match again, but we reccommand
+               you to come back later! From xxam to xxpm, we have the largest number of players.</p>
+          </li>
+
+          <li>
+            <h4>Are there any groupchats for this website?</h4>
+            <p>Will decide if we get 100&nbsp; active players per day, we are not going to do it right now.</p>
+          </li>
+
+          <li>
+            <h4>What if the code setter gives incorrect feedbacks?</h4>
+            <p>Don't worry, if the setter gives incorrect responses, a warning will rise. If the setter cannot give the correct
+                response on time, guesser will win.
+            </p>
+          </li>
+        </ul>
+        </div>
+      </aside>
+
+    </main>
+
+<h2>Supports</h2>
+
+<form action="/my-handling-form-page" method="post">
+  <p>If you want to say anything or report a bug, don't hesitate to contact us!</p>
+    <ul>
+     <li>
+       <label for="name">Name:</label>
+       <input type="text" id="name" name="user_name" />
+     </li>
+     <li>
+       <label for="mail">E-mail:</label>
+       <input type="email" id="mail" name="user_email" />
+     </li>
+     <li>
+       <label for="cont">Content:</label>
+       <textarea id="cont" name="user_msg"></textarea>
+     </li>
+
+     <li class="button">
+        <button type="submit">Send</button>
+     </li>
+    </ul>
+</form>
+<footer>
+  <center>
+    <p>©Copyright 2077 by Dicky Twister ltd. All rights reserved.</p>
+    </center>
+</footer>
+  </body>
+</html>
