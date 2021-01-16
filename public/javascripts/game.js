@@ -65,7 +65,7 @@ Game.prototype.addPlayer = function(player) {
   console.assert(player instanceof Object, "%s: Expecting an object (WebSocket), got a %s", arguments.callee.name, typeof player);
 
   if (this.hasTwoConnectedPlayers()) {
-      return new Error("Invalid call to addPlayer, current state is " + this.gameState);
+      return new Error("This room is already full!");
   }
 
   if(this.setter === null) {
