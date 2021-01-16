@@ -17,20 +17,17 @@ app.use(express.static(__dirname + "/public"));
 app.get("/", indexRouter);
 app.get("/play", indexRouter);
 
-server.on('error', (err) => {
-    console.error(err);
-})
-
 var currentGame = new Game(gameStats.ongoingGames++);
 var connectionID = 0; //each websocket receives a unique ID
 let clients = {};
+console.log(currentGame);
 
 wss.on("connection", function connection(ws) {
     /*
      * two-player game: every two players are added to the same game
      * cd \CSE\Year1-Q2\CSE1500\web\myapp
      */
-    console.log("You are connected.");
+    console.log("One client connected.");
     let newPlayer = ws;
     gameStats.onlinePlayers++;
     newPlayer.id = connectionID++;
