@@ -44,8 +44,8 @@ wss.on("connection", function connection(ws) {
     if (currentGame.hasTwoConnectedPlayers()) {
         currentGame.send("Now code setter should set the code.");
         currentGame.setter.send(messages.S_START_GAME);
-        currentGame = new Game(gameStatusObj.getGameInitialized());
-        gameStatusObj.addGameInitialzed();
+        currentGame = new Game(gameStats.getOngoingGames());
+        gameStats.addOngoingGames();
     }
 });
 

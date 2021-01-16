@@ -19,9 +19,19 @@ let gameStats = {
 
     addFinishedGames: function(){
       this.finishedGames++;
-    }
+    },
     
+    getOnlinePlayer: function(){
+      return this.onlinePlayers;
+    },
 
+    getOngoingGames: function(){
+      return this.ongoingGames;
+    },
+
+    getFinishedGames: function(){
+      return this.finishedGames;
+    }
 };
   
 module.exports = gameStats;
