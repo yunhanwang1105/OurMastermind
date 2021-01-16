@@ -1,6 +1,8 @@
 const express = require("express");
 const http = require("http");
 const indexRouter = require("./routes/index");
+const Game = require("./public/javascripts/game")
+const messages = require("./public/javascripts/messages")
 const app = express();
 const server = http.createServer(app);
 const websocket = require("ws");
@@ -19,10 +21,6 @@ server.on('error', (err) => {
     console.error(err);
 })
 
-server.listen(port, () => {
-    console.log('server is ready.');
-});
-
 var currentGame = new Game(gameStats.ongoingGames++);
 var connectionID = 0; //each websocket receives a unique ID
 let clients = {};
@@ -30,6 +28,7 @@ let clients = {};
 wss.on("connection", function connection(ws) {
     /*
      * two-player game: every two players are added to the same game
+     * cd \CSE\Year1-Q2\CSE1500\web\myapp
      */
     console.log("You are connected.");
     let newPlayer = ws;
@@ -48,4 +47,8 @@ wss.on("connection", function connection(ws) {
         currentGame = new Game(gameStatusObj.getGameInitialized());
         gameStatusObj.addGameInitialzed();
     }
+});
+
+server.listen(port, () => {
+    console.log('server is ready.');
 });
