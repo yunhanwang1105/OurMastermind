@@ -147,3 +147,37 @@ function playAgain(){
 function disPlayTheAnswerCode(){
 
 }
+
+(function setup() {
+  var socket = new WebSocket("ws://localhost:3000");
+  
+  const gameObj = new gameObject('#game',socket);
+  socket.onmessage = function (event) { 
+      console.log("message recieved");
+      let incomingMessage = JSON.parse(event.data);
+      console.log(incomingMessage);
+      if (incomingMessage.type === "START-GAME") {
+          console.log(incomingMessage);
+          gameObj.setTurn(true);
+          $("#GameStatus .Status").text("It's your turn.");
+      }
+
+      if (incomingMessage.type === Messages.T_PLAYER_A) {
+          gameObj.setPlayer("CodeSetter");
+          gameObj.createGrid();
+          gameObj.setUpMouseControl();
+          $("#GameStatus").append(`<p class="GamerSetter"> You are the setter.</p>`);
+          $("#GameStatus").append(`<p class="Status"> It's not your turn. please wait for other user to opperate!</p>`)
+
+
+      }
+
+      if (incomingMessage.type === Messages.T_PLAYER_B) {
+          gameObj.setPlayer("CodeGuesser");
+          gameObj.createGrid();
+          gameObj.setUpMouseControl();
+          $("#GameStatus").append(`<p class="GamerGuesser"> You are the code guesser.</p>`);
+          $("#GameStatus").append(`<p class="GamerGuesser Status"> Game is not starting, please wait for other player to join</p>`)
+      }
+    }
+});

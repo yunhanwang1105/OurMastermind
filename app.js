@@ -13,13 +13,15 @@ var port = process.argv[2];
 
 app.use(express.static(__dirname + "/public"));
 
-
+app.set('port', port);
 app.get("/", indexRouter);
 app.get("/play", indexRouter);
 
+module.exports = app;
+
 var currentGame = new Game(gameStats.ongoingGames++);
 var connectionID = 0; //each websocket receives a unique ID
-let clients = {};
+let clients ={};
 console.log(currentGame);
 
 wss.on("connection", function connection(ws) {
@@ -44,6 +46,7 @@ wss.on("connection", function connection(ws) {
         currentGame = new Game(gameStats.getOngoingGames());
         gameStats.addOngoingGames();
     }
+    
 });
 
 server.listen(port, () => {
