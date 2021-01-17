@@ -60,7 +60,7 @@ wss.on("connection", function connection(ws) {
 
     }
 
-    ws.on("message", function incoming(message) {
+    newPlayer.on("message", function incoming(message) {
         let oMsg = JSON.parse(message);
         if (oMsg.type === "CODE-GIVEN") {
             currentGame.guesser.send(messages.GUESS_COLOR);
@@ -83,26 +83,33 @@ wss.on("connection", function connection(ws) {
         if (oMsg.type === "GAME-RESULT") {
             let winner = oMsg.data;
             if (winner == "CodeGuesser") {
-
+                currentGame.send(messages.GMAE_RESULT);
             } else {
-                
+                currentGame.send(messages.GMAE_RESULT);
             }
         }
 
-        ws.on("close", function(code){
+        newPlayer.on("close", function(code){
             /*
              * code 1001 means almost always closing initiated by the client;
              * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
             */
-
+           console.log("Game %s end.", newPlayer.id);
             if (code == "1001"){
-            console.log(con.id + " disconnected ...");
-            console.log(ws.id + "disconnected.");
-            if (oMsg.type === "GAME-ABORTED"){
+                console.log(con.id + " disconnected ...");
+                console.log(newPlayer.id + "disconnected.");
+                if (oMsg.type === "GAME-ABORTED"){
+                    if (currentGame.setter !== null){
+                        currentGame.setter.close();
+                        currentGame.setter = null;
+                    } else {
+                    currentGame.guesser.close();
+                    currentGame.guesser = null;
+                    }
+                }
             }
-        }
         });
-        });
+    });
 
     });
 
