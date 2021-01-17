@@ -41,8 +41,6 @@ let Game = function(id){
     [0, 0, 0, 0, 0, 0, 0, 0],   // Disconnected
   ];
   Game.prototype.addPlayer = function(player) {
-    console.assert(player instanceof Object, "%s: Expecting an object (WebSocket), got a %s", arguments.callee.name, typeof player);
-  
     if (this.hasTwoConnectedPlayers()) {
         return new Error("This room is already full!");
     }

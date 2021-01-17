@@ -21,7 +21,7 @@ module.exports = app;
 
 var currentGame = new Game(gameStats.ongoingGames++);
 var connectionID = 0; //each websocket receives a unique ID
-let clients ={};
+let games ={};
 console.log(currentGame);
 
 wss.on("connection", function connection(ws) {
@@ -35,11 +35,12 @@ wss.on("connection", function connection(ws) {
     newPlayer.id = connectionID++;
     let playerType = currentGame.addPlayer(newPlayer);
     gameStats.addOnlinePlayer();
-    clients[newPlayer.id] = currentGame;
+    games[newPlayer.id] = currentGame;
   
     console.log("Player %s placed in game %s as %s", newPlayer.id, currentGame.id, playerType);
     newPlayer.send((playerType === "CodeSetter") ? messages.S_PLAYER_A : messages.S_PLAYER_B);
-
+    
+    // after 2 players enter the same game
     if (currentGame.hasTwoConnectedPlayers()) {
         currentGame.send("Now code setter should set the code.");
         currentGame.setter.send(messages.S_START_GAME);
