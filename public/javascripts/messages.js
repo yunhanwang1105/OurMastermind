@@ -2,6 +2,68 @@
   exports.O_START_GAME = {
     type: "START-GAME"
   }
+
+  // anouncement
+  exports.ANOUNCEMENT = "ANOUNCEMENT";
+  exports.O_ANOUNCEMENT = {
+    type: exports.ANOUNCEMENT,
+    data: null
+  };
+
+  
+  // Server to client: sent player role
+
+  exports.ROLE = {
+    type: null,
+    data: null
+  };
+
+  // Setter to server: code set
+
+  exports.CODEGIVEN = {
+    type: "CODE-GIVEN",
+    data: null
+  };
+
+
+  // Server to guesser: inform guesser to guess
+  exports.GUESS_COLOR = {
+    type: "GUESS-COLOR",
+    data: "Guesser's turn"
+  };
+
+  // Guesser to server: inform server, guess color made, send an array of colors
+  exports.GUESS_MADE = {
+    type: "GUESS-MADE",
+    data: null
+  };
+
+  // Server to setter: send array to guesser to check
+  exports.CHECK_GUESS = {
+    type: "CEHCK-GUESS",
+    data: null
+  };
+
+  // Setter to server: send array of hints
+  exports.HINTS_MADE = {
+    type: "HINTS-MADE",
+    data: null
+  };
+
+  // Server to guesser: send array of hints
+  exports.GIVE_HINTS_TO = {
+    type: "GIVE-HINTS-TO",
+    data: null
+  };
+
+  // Client to server: give game result
+  exports.GMAE_RESULT = {
+    type: "GAME-RESULT",
+    data: null
+  };
+
+  // 
+  
   exports.S_START_GAME = JSON.stringify(exports.O_START_GAME);
     /*
      * Client to server: game is complete, the winner is ...
@@ -25,45 +87,6 @@
      */
     exports.O_CHOOSE = { type: "CHOOSE-COLOUR" };
     exports.S_CHOOSE = JSON.stringify(exports.O_CHOOSE);
-  
-    /*
-     * Server to client: set as player A, aka the code setter
-     */
-    exports.T_PLAYER_TYPE = "PLAYER-TYPE";
-    exports.O_PLAYER_A = {
-      type: exports.T_PLAYER_TYPE,
-      data: "A"
-    };
-    exports.S_PLAYER_A = JSON.stringify(exports.O_PLAYER_A);
-  
-    /*
-     * Server to client: set as player B, aka the code guesser
-     */
-    exports.O_PLAYER_B = {
-      type: exports.T_PLAYER_TYPE,
-      data: "B"
-    };
-    exports.S_PLAYER_B = JSON.stringify(exports.O_PLAYER_B);
-  
-    /*
-     * Player A to server OR server to Player B: this is the code to be guessed
-     */
-    exports.T_TARGET_COLOUR = "SET-TARGET-COLOUR";
-    exports.O_TARGET_COLOUR = {
-      type: exports.T_TARGET_COLOUR,
-      data: null
-    };
-    //exports.S_TARGET_WORD does not exist, as we always need to fill the data property
-  
-    /*
-     * Player B to server OR server to Player A: guess made by player B.
-     */
-    exports.T_MAKE_A_GUESS = "MAKE-A-GUESS";
-    exports.O_MAKE_A_GUESS = {
-      type: exports.T_MAKE_A_GUESS,
-      data: null
-    };
-    //exports.S_MAKE_A_GUESS does not exist, as data needs to be set
 
     /*
     Player A to server OR server to Player B: This is the key pegs
@@ -74,6 +97,10 @@
         data: null
     };
    
+
+
+
+
     /*
      * Server to Player A & B: game over with result won/loss
      */

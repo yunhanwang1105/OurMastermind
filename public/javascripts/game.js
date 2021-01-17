@@ -1,7 +1,7 @@
 // These are the numbers to be recorded.
 let guesses = 0;
-let player1Wins = 0;
-let player2Wins = 0;
+let guesserScore = 0;
+let setterScore = 0;
 let finished = false;
 
 // These are the arrays.
@@ -12,18 +12,18 @@ let history = [];
 // These are the selectors.
 const historyEl = document.querySelector(".history");
 const currentSelectionEl = document.querySelector(".current-selection");
-let final = randomFinal();
+let code = randomcode();
 
 // Buttons that will appear/disappear when special conditions are met.
 document.getElementById('newGames').style.visibility = 'hidden';
 
 // Generate a random set of codes to be the code the code guesser need to guess.
-function randomFinal() {
-  let newFinal = [...new Array(4)].map(f => {
+function randomcode() {
+  let newcode = [...new Array(4)].map(f => {
     let random = Math.floor(Math.random() * Math.floor(colors.length));
     return colors[random];
   });
-  return newFinal;
+  return newcode;
 }
 
 // How the code guesser select a colour.
@@ -42,14 +42,14 @@ function calculateHints(colors) {
   const dublicateCheck = [];
 
   colors.forEach((color, index) => {
-    if (final[index] === color) {
+    if (code[index] === color) {
       hints.push("full");
       dublicateCheck.push(color);
     }
   });
 
   colors.forEach((color) => {
-    if (!dublicateCheck.includes(color) && final.includes(color)) {
+    if (!dublicateCheck.includes(color) && code.includes(color)) {
       hints.push("half");
     }
   });
@@ -114,18 +114,17 @@ function checkTheGuesses(){
     guesses++;
 
     colorChosen.length = 0;
-    if (hints.length === final.length && hints.every(hint => hint === "full")) {
+    if (hints.length === code.length && hints.every(hint => hint === "full")) {
       window.alert("Correct code! Do you want to start another game?");
       document.getElementById('makeGuess').style.visibility = 'hidden';
       document.getElementById('newGames').style.visibility = 'visible';
-      player1Wins++;
-      document.getElementsByClassName("scoreboard").innerHTML = player1Wins + " : " + player2Wins;
+      guesserScore++;
+      document.getElementsByClassName("scoreboard").innerHTML = setterScore + ": " + guesserScore;
     } else if (guesses > 10) {
-      window.alert("Please go upgrading your brain.");
       document.getElementById('makeGuess').style.visibility = 'hidden';
       document.getElementById('newGames').style.visibility = 'visible';
-      player2Wins++;
-      document.getElementsByClassName("scoreboard").innerHTML = player1Wins + " : " + player2Wins;
+      setterScore++;
+      document.getElementsByClassName("scoreboard").innerHTML = setterScore + " : " + guesserScore;
     }
     }
   
@@ -134,7 +133,7 @@ function checkTheGuesses(){
 // To start a new game.
 function playAgain(){
   resetChoices();
-  final = randomFinal();
+  code = randomcode();
   guesses = 0;
   history = [];
   colorChosen = [];
@@ -143,31 +142,31 @@ function playAgain(){
   historyEl.innerHTML = "";
 }
 
-// display the correct answer.
-function disPlayTheAnswerCode(){
 
-}
 
-(function setup() {
-  var socket = new WebSocket("ws://localhost:3000");
+
+
+
+// (function setup() {
+//   var socket = new WebSocket("ws://localhost:3000");
   
-  const gameObj = new gameObject('#game',socket);
-  socket.onmessage = function (event) { 
-      console.log("message recieved");
-      let incomingMessage = JSON.parse(event.data);
-      console.log(incomingMessage);
-      if (incomingMessage.type === "START-GAME") {
-          console.log(incomingMessage);
-      }
+//   const gameObj = new gameObject('#game',socket);
+//   socket.onmessage = function (event) { 
+//       console.log("message recieved");
+//       let incomingMessage = JSON.parse(event.data);
+//       console.log(incomingMessage);
+//       if (incomingMessage.type === "START-GAME") {
+//           console.log(incomingMessage);
+//       }
 
-      if (incomingMessage.type === Messages.T_PLAYER_A) {
-          gameObj.setPlayer("CodeSetter");
-          document.getElementsByClassName('Board').innerHTML.append("You are the setter");
-      }
+//       if (incomingMessage.type === Messages.T_PLAYER_A) {
+//           gameObj.setPlayer("CodeSetter");
+//           document.getElementsByClassName('Board').innerHTML.append("You are the setter");
+//       }
 
-      if (incomingMessage.type === Messages.T_PLAYER_B) {
-          gameObj.setPlayer("CodeGuesser");
-          document.getElementsByClassName('Board').innerHTML.append("You are the guesser");
-      }
-    }
-});
+//       if (incomingMessage.type === Messages.T_PLAYER_B) {
+//           gameObj.setPlayer("CodeGuesser");
+//           document.getElementsByClassName('Board').innerHTML.append("You are the guesser");
+//       }
+//     }
+// });
