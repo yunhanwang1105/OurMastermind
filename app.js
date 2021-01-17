@@ -54,7 +54,7 @@ wss.on("connection", function connection(ws) {
 
         
         let Msg = messages.ANOUNCEMENT;
-        Msg.data = "Now Setter should set the code";
+        Msg.data = "Now setter should set the code";
         currentGame.setter.send(Msg);
         currentGame.getter.send(Msg);
 
