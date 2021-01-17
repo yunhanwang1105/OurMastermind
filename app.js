@@ -83,9 +83,10 @@ wss.on("connection", function connection(ws) {
         if (oMsg.type === "GAME-RESULT") {
             let winner = oMsg.data;
             if (winner == "CodeGuesser") {
-                currentGame.send(messages.GMAE_RESULT);
+                currentGame.guesser.send(messages.GAME_RESULT);
+                currentGame.setter.send(messages.GAME_RESULT);
             } else {
-                currentGame.send(messages.GMAE_RESULT);
+                currentGame.guesser.send(messages.GMAE_RESULT);
             }
         }
 

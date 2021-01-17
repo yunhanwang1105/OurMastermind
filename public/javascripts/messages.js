@@ -57,7 +57,7 @@
   };
 
   // Client to server: give game result
-  exports.GMAE_RESULT = {
+  exports.GAME_RESULT = {
     type: "GAME-RESULT",
     data: null
   };
