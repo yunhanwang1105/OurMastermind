@@ -8,6 +8,8 @@
     <link href="stylesheets\pegsCollection.css" rel="stylesheet" />
   </head>
   <body>
+    <div class="anouncement"></div>
+
     <h1>Choose color</h1>
     <div class="items">
       <div class= "item red"></div>
@@ -19,6 +21,7 @@
     </div>
     <h1>Current selection:</h1>
     <div class="current-selection"></div>
+
     <input id="reset" type="button" value="Reset" onclick="resetChoices();" />
     <input id="makeGuess" type="button" value="Guess" onclick="checkTheGuesses();" />
     <input id="newGames" type="button" value="Play again" onclick="playAgain();" />
@@ -28,8 +31,8 @@
 
     <h2>Scoreboard</h2>
     <div class="scoreboard">
-      <div id="player1Win"></div>
-      <div id="player2Win"></div>
+      <div id="Setter-score"></div>
+      <div id="Guesser-score"></div>
     </div>
   </body>
 
