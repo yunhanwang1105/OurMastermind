@@ -147,6 +147,7 @@ socket.onmessage = function (msg) {
     if (incomingMessage.type === "SETTER-WIN") {
         anouncementSelector.innerHTML = "Setter wins!";
         setterScore++;
+        
         let scoreboardSelector = document.querySelector(".scoreboard").innerHTML = setterScore + " : " + guesserScore;
 
     }
