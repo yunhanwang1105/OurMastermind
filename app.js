@@ -36,8 +36,10 @@ function initialiseGame(p1, p2){
 
     p1.status = "playing";
     p1.game = Game;
+    p1.role = "CodeSetter";
     p2.status = "playing";
     p2.game = Game;
+    p2.role = "CodeGuesser";
     
     console.log("game " + Game.index + " started, Game info:\nSetter: " + Game.setter +"\nGuesser: " + Game.guesser);
 
@@ -76,33 +78,43 @@ wss.on("connection", function connection(ws) {
     
 
     ws.on("message", function incoming(message) {
-        let oMsg = JSON.parse(message);
+        console.log(message);
+        var oMsg;
+        oMsg = JSON.parse(message);
         if (oMsg.type === "CODE-GIVEN") {
-            currentGame.guesser.send(messages.GUESS_COLOR);
+            currentGame.guesser.ws.send(messages.GUESS_COLOR);
+            console.log("Code given");
         }
 
         if (oMsg.type === "GUESS-MADE") {
             let colors = oMsg.data;
             let checkMsg = messages.CHECK_GUESS;
             checkMsg.data = colors;
-            currentGame.setter.send(checkMsg);
+            currentGame.setter.ws.send(checkMsg);
+            console.log("Guess made");
         }
 
         if (oMsg.type === "HINTS-MADE") {
             let hints = oMsg.data;
             let giveHintsMsg = messages.GIVE_HINTS_TO;
             giveHintsMsg.data = hints;
-            currentGame.guesser.send(giveHintsMsg);
+            currentGame.guesser.ws.send(giveHintsMsg);
+            console.log("Hints made");
         }
 
         if (oMsg.type === "GAME-RESULT") {
             let winner = oMsg.data;
             if (winner == "CodeGuesser") {
-                currentGame.guesser.send(messages.GAME_RESULT);
-                currentGame.setter.send(messages.GAME_RESULT);
+
+                let res =JSON.stringify({type: "GUESSER-WIN"});
+                currentGame.guesser.ws.send(res);
+                
             } else {
-                currentGame.guesser.send(messages.GAME_RESULT);
+                let res = JSON.stringify({type: "SETTER-WIN"});
+                currentGame.guesser.ws.send(res);
             }
+            console.log("There is a winner for game " + currentGame.index);
+            currentGame.state = "finished";
         }
 
         ws.on("close", function(code){
@@ -114,7 +126,7 @@ wss.on("connection", function connection(ws) {
             if (code == 1001){
                 currentGame.setState("DISCONNECTED");
                 console.log(currentGame.index + " disconnected...");
-                console.log(currentGame.index + "disconnected.");
+                console.log(currentGame.index + " disconnected.");
                 if (oMsg.type === "GAME-ABORTED"){
                     if (currentGame.setter !== null){
                         currentGame.setter.close();

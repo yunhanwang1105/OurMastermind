@@ -12,6 +12,10 @@
     display: flex;
 }
 
+.invisible {
+    display: none;
+}
+
 .board {
     background-color: antiquewhite;
 }

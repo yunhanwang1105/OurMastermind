@@ -5,6 +5,7 @@ let guesserScore = 0;
 let setterScore = 0;
 let finished = false;
 
+
 // this is the code to guess (only for setter)
 let code = [];
 
@@ -36,10 +37,10 @@ const checkBtnSelector = document.querySelector(".check");
 const resetBtnSelector = document.querySelector(".reset");
 document.getElementById('new-game').style.visibility = 'hidden';
 
-const scoreboardSelector = document.querySelector(".scoreboard");
+const scoreboardSelector = document.querySelector(".scoreboard").innerHTML = "0 : 0";
 
 const btnColorSelector = document.querySelectorAll(".item");
-
+const hintSectionSelector = document.getElementsByClassName("setter_hint");
 
 // hint color to select was initialy hidden
 
@@ -60,40 +61,34 @@ socket.onmessage = function (msg) {
 
     // assign role to the current HTML user
     if (incomingMessage.role === "CodeSetter") {
-        role = "CodeSetter";
+        this.role = "CodeSetter";
 
         checkBtnSelector.addEventListener("click", () => checkHints());
         resetBtnSelector.addEventListener("click", () => resetHints());
-
+        console.log("html set");
         //document.getElementById('new-game').style.visibility = 'visible';
 
+        console.log("add action listener to color btn");
+        btnColorSelector.forEach(btn => {
+            const color = btn.classList[1];
+            btn.addEventListener("click", () => selectCodeColor(color));
+        
+        });
+
+
+
     } else {
+        this.role = "CodeGuesser";
 
         checkBtnSelector.addEventListener("click", () => checkColor());
         resetBtnSelector.addEventListener("click", () => resetColor());
-        role = "CodeGuesser";
+        console.log("html set");
         //checkBtnSelector.addEventListener("click", )
 
     }
 
-    // anouncement
-    if (incomingMessage.type === "ANOUNCEMENT") {
-        anouncementSelector.innerHTML = incomingMessage.data;
-
-        if (role === "CodeSetter") {
-
-            btnColorSelector.forEach(btn => {
-                const color = btn.classList[1];
-                btn.addEventListener("click", () => selectCodeColor(color));
-            
-            });
-
-        }
-
-    }
-
     // guesser's turn
-    if (incomingMessage.type === "GUESS-COLOR" && role == "CodeGuesser") {
+    if (incomingMessage.type === "GUESS-COLOR" && this.role == "CodeGuesser") {
         anouncementSelector.innerHTML = incomingMessage.data;
 
         btnColorSelector.forEach(btn => {
@@ -106,15 +101,53 @@ socket.onmessage = function (msg) {
     }
 
     // setter's turn
-    if (incomingMessage.type === "CEHCK-GUESS" && role == "CodeSetter") {
+    if (incomingMessage.type === "CEHCK-GUESS" && this.role === "CodeSetter") {
+
+        guesses++;
+
         anouncementSelector.innerHTML = "Setter should make hints";
         currentGuessCode = incomingMessage.data;
-
+        for (let i = 0; i < currentGuessCode.length; i++) {
+            const div = document.createElement("div");
+            div.classList.add("code-selection-item");
+            div.classList.add(currentGuessCode[i]);
+            codeInnerBoard.appendChild(div);
+        }
+        boardSelector.appendChild(codeInnerBoard);
 
     }
 
     // guesser's another turn, with hints
-    if (incomingMessage.type === "GIVE-HINTS-TO") {
+    if (incomingMessage.type === "GIVE-HINTS-TO" && this.role === "CodeGuesser") {
+
+
+
+        anouncementSelector.innerHTML = "Guess again";
+        const hintsInnerBoard = document.createElement("div");
+        let hints = incomingMessage.data;
+        hintsInnerBoard.classList.add("codeInnerBoard");
+        for (let i = 0; i < hints.length; i++) {
+            const div = document.createElement("div");
+            div.classList.add("hint-selection");
+            div.classList.add(hints[i]);
+            hintsInnerBoard.appendChild(div);
+        }
+        boardSelector.appendChild(hintsInnerBoard);
+
+    }
+
+    if (incomingMessage.type === "GUESSER-WIN") {
+        anouncementSelector.innerHTML = "Guesser wins!";
+        guesserScore++;
+
+        let scoreboardSelector = document.querySelector(".scoreboard").innerHTML = setterScore + " : " + guesserScore;
+
+    }
+
+    if (incomingMessage.type === "SETTER-WIN") {
+        anouncementSelector.innerHTML = "Setter wins!";
+        setterScore++;
+        let scoreboardSelector = document.querySelector(".scoreboard").innerHTML = setterScore + " : " + guesserScore;
 
     }
 
@@ -129,7 +162,7 @@ function selectCodeColor(color) {
     div.classList.add("code-selection-item");
     div.classList.add(color);
 
-    codeInnerBoard.appendChild(div);
+    this.codeInnerBoard.appendChild(div);
 
     // make color visible on current selection
     currentSelectionSelector.appendChild(div);
@@ -142,9 +175,10 @@ function selectCodeColor(color) {
 
         // clear innerboard, reuse
         codeInnerBoard = document.createElement("div");
-
-        // inform serve that code is given
-        socket.send(messages.CODEGIVEN);
+                
+        // !!!!!!!!!!!!
+        var request = JSON.stringify({type: "CODE-GIVEN"});
+        socket.send(request);
 
         // 4 colors are set, make color btn inactive
         btnColorSelector.forEach(btn => {
@@ -152,7 +186,7 @@ function selectCodeColor(color) {
         });
 
         // then make selecting hints possible, visible
-        document.getElementsByClassName("setter_hint").style.visibility = "visible";
+        this.hintSectionSelector.classList.remove("invisible");
         
         hintColorSelector.forEach(h => {
             const hintType = h.classList[1];
@@ -201,26 +235,40 @@ function checkHints() {
 
         let allCorrect = true;
         for (let i = 0; i < currentHints.length; i++) {
-            if (code[i] !== currentHints[i]){
+            if ("full" !== currentHints[i]){
                 allCorrect = false;
                 return;
             }
         }
+        if (currentHints.length !== 4) {
+            allCorrect = false;
+        }
+
         
         if (allCorrect && guesses <= 10) {
-            let msg = messages.GAME_RESULT;
-            msg.data = "CodeGuesser";
-            socket.send(msg);
+            // guesser wins
+            let request = JSON.stringify({type: "GAME-RESULT", data: "CodeGuesser"});
+            socket.send(request);
+            guesserScore++;
+            this.scoreboardSelector.innerHTML = setterScore + " : " + guesserScore;
             return;
         }
-        guesses++;
+
+        if (!allCorrect && guesses === 10) {
+            // setter wins
+            let request = JSON.stringify({type: "GAME-RESULT", data: "CodeSetter"});
+            socket.send(request);
+            setterScore++;
+            this.scoreboardSelector.innerHTML = setterScore + " : " + guesserScore;
+            return;
+        }
 
         currentSelectionSelector.innerHTML = "";
         anouncementSelector.innerHTML = "Correct hints, sending to guesser";
         // send hints array to server to guesser
-        let Msg = messages.HINTS_MADE;
-        Msg.data = currentHints;
+        let Msg = JSON.stringify({type: "HINTS-MADE", data: currentHints});
         socket.send(Msg);
+
         // clear current hints
         currentHints = [];
     }
@@ -313,30 +361,17 @@ function checkColor(){
         window.alert("You have to choose 4 colours.");
     } else{
 
-
-
         currentSelectionSelector.innerHTML = "";
         boardSelector.appendChild(codeInnerBoard);
 
         // clear innerboard, reuse
         codeInnerBoard = document.createElement("div");
 
-        // inform serve that color guess is given
-        let msg = messages.GUESS_MADE;
-        msg.data = currentGuessCode;
-        socket.send(msg);
+       
+        let request = JSON.stringify({type: "GUESS-MADE",
+                                      data: this.currentGuessCode});
+        socket.send(request);
         guesses++;
-
-        if (guesses >= 11) {
-            setterScore++;
-            
-            scoreboardSelector.innerHTML = setterScore + " : " + guesserScore;
-            // run out of guesses, lose
-            let msg2 = messages.GAME_RESULT;
-            msg2.data = "CodeSetter";
-            socket.send(msg2);
-            return;
-        }
 
         currentGuessCode = [];
         anouncementSelector.innerHTML = "waiting code setter to give hints...";
