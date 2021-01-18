@@ -12,6 +12,13 @@
     display: flex;
 }
 
+.board {
+    background-color: antiquewhite;
+}
+
+.codeInnerBoard {
+    background-color: coral;
+}
 
 .orange {
     background-color: orange;
