@@ -98,13 +98,6 @@ wss.on("connection", function connection(ws) {
              * code 1001 means almost always closing initiated by the client;
              * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
             */
-<<<<<<< HEAD
-=======
-           console.log("Game %s end.", currentGame.index);
->>>>>>> b924af275c681eb424109bdb6ad88990fc33bab4
-            if (code == "1001"){
-                currentGame.setState("DISCONNECTED");
-                console.log(currentGame.index + " disconnected ...");
                 console.log(currentGame.index + "disconnected.");
                 if (oMsg.type === "GAME-ABORTED"){
                     if (currentGame.setter !== null){
