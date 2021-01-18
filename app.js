@@ -1,7 +1,7 @@
+// @ts-check
 const express = require("express");
 const http = require("http");
 const indexRouter = require("./routes/index");
-const Game = require("./public/javascripts/gameObject")
 const messages = require("./public/javascripts/messages")
 const app = express();
 const server = http.createServer(app);
@@ -19,48 +19,49 @@ app.get("/play", indexRouter);
 
 module.exports = app;
 
+let games = [];
+let players = [];
+let gameCounter = 0;
+var ind = 0;
+
+function initialiseGame(setter, guesser){
+    function Game(index) {
+        this.index = games.length,
+        this.setter = null,
+        this.guesser = null,
+        this.status = "playing"
+    }
+
+    games.push(Game);
+    gameStats.gamesOngoing++;
+    gameStats.onlinePlayers = gameStats.onlinePlayers + 2;
+}
+
 wss.on("connection", function connection(ws) {
     /*
      * two-player game: every two players are added to the same game
      * cd \CSE\Year1-Q2\CSE1500\web\myapp
      */
-    var currentGame = new Game(gameStats.ongoingGames++);
-    var connectionID = 0; //each websocket receives a unique ID
-    let games ={};
-    console.log(currentGame);
-    console.log("One client connected.");
+    var player = {};
+    player.name = "player " + ind;
+    ind++;
+    player.ws = ws;
+    player.status = "searching";
+    players.push(player);
+
+    console.log(player.name + "connected.");
     
-    let newPlayer = ws;
-    gameStats.onlinePlayers++;
-    newPlayer.id = connectionID++;
-    let playerType = currentGame.addPlayer(newPlayer);
-    gameStats.addOnlinePlayer();
-    games[newPlayer.id] = currentGame;
+    var res = JSON.stringify({status:"searching",message: "Finding an opponent..."});
+    ws.send(res);
+
+    players.forEach(function(p) {
+        if(p.status == 'searching' && p.name != player.name){
+            var currentGame = initialiseGame(p, player); 
+        }
+    });
     
-    console.log("Player %s placed in game %s as %s", newPlayer.id, currentGame.id, playerType);
-    let roleMsg = messages.ROLE;
-    roleMsg.data = playerType;
-    newPlayer.send(roleMsg);
 
-
-    if (playerType === "CodeSetter") {
-        currentGame.setter = newPlayer;
-    } else {
-        currentGame.guesser = newPlayer;
-    }
-    
-    // after 2 players enter the same game
-    if (currentGame.hasTwoConnectedPlayers()) {
-
-        
-        let Msg = messages.ANOUNCEMENT;
-        Msg.data = "Now setter should set the code";
-        currentGame.setter.send(Msg);
-        currentGame.getter.send(Msg);
-
-    }
-
-    newPlayer.on("message", function incoming(message) {
+    ws.on("message", function incoming(message) {
         let oMsg = JSON.parse(message);
         if (oMsg.type === "CODE-GIVEN") {
             currentGame.guesser.send(messages.GUESS_COLOR);
@@ -86,19 +87,20 @@ wss.on("connection", function connection(ws) {
                 currentGame.guesser.send(messages.GAME_RESULT);
                 currentGame.setter.send(messages.GAME_RESULT);
             } else {
-                currentGame.guesser.send(messages.GMAE_RESULT);
+                currentGame.guesser.send(messages.GAME_RESULT);
             }
         }
 
-        newPlayer.on("close", function(code){
+        ws.on("close", function(code){
             /*
              * code 1001 means almost always closing initiated by the client;
              * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
             */
            console.log("Game %s end.", newPlayer.id);
             if (code == "1001"){
-                console.log(con.id + " disconnected ...");
-                console.log(newPlayer.id + "disconnected.");
+                currentGame.setState("DISCONNECTED");
+                console.log(ws.id + " disconnected ...");
+                console.log(currentGame.id + "disconnected.");
                 if (oMsg.type === "GAME-ABORTED"){
                     if (currentGame.setter !== null){
                         currentGame.setter.close();
@@ -112,7 +114,8 @@ wss.on("connection", function connection(ws) {
         });
     });
 
-    });
+
+});
 
 server.listen(port, () => {
     console.log('server is ready.');

@@ -1,6 +1,7 @@
+// @ts-check
 // const express = require("express");
 // const http = require("http");
-const messages = require("./javascripts/messages")
+const messages = require("./messages")
 
 // These are the numbers to be recorded.
 let guesses = 0;
@@ -45,9 +46,9 @@ const btnColorSelector = document.querySelectorAll(".item");
 
 
 // hint color to select was initialy hidden
-document.getElementsByClassName("setter_hint").style.visibility = "hidden";
+document.getElementsByClassName(".setter_hint").style.visibility = "hidden";
 
-const hintColorSelector = document.querySelectorAll(".setter_hint");
+const hintColorSelector = document.querySelectorAll(".hint");
 
 
 
