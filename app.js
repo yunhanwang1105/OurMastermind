@@ -24,15 +24,28 @@ let players = [];
 let gameCounter = 0;
 var ind = 0;
 
-function initialiseGame(setter, guesser){
-    function Game(index) {
-        this.index = games.length,
-        this.setter = null,
-        this.guesser = null,
-        this.status = "playing"
-    }
-
+function initialiseGame(p1, p2){
+    var Game = {
+        index:   games.length,
+        setter:  p1,
+        guesser: p2,
+        status:  "started"
+    };
+    
     games.push(Game);
+
+    p1.status = "playing";
+    p1.game = Game;
+    p2.status = "playing";
+    p2.game = Game;
+    
+    console.log("game " + Game.index + " started.");
+
+    var res = {player:1, data: "CodeSetter",status: "started"};
+    p1.ws.send(JSON.stringify(res));
+    res = {player:2, data: "CodeGuesser", status: "started"};
+    p2.ws.send(JSON.stringify(res));
+
     gameStats.gamesOngoing++;
     gameStats.onlinePlayers = gameStats.onlinePlayers + 2;
 }
