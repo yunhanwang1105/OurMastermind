@@ -111,7 +111,7 @@ wss.on("connection", function connection(ws) {
              * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
             */
            console.log("Game %s end.", currentGame.index);
-            if (code == "1001"){
+            if (code == 1001){
                 currentGame.setState("DISCONNECTED");
                 console.log(currentGame.index + " disconnected...");
                 console.log(currentGame.index + "disconnected.");
