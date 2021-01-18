@@ -58,7 +58,7 @@ wss.on("connection", function connection(ws) {
 
     players.forEach(function(p) {
         if(p.status == 'searching' && p.name != player.name){
-            currentGame = initialiseGame(p, player); 
+            currentGame = initialiseGame(p,player); 
         }
     });
     
