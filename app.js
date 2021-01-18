@@ -51,7 +51,7 @@ wss.on("connection", function connection(ws) {
     player.status = "searching";
     players.push(player);
 
-    console.log(player.name + "connected.");
+    console.log(player.name + " connected.");
     
     var res = JSON.stringify({status:"searching",message: "Finding an opponent..."});
     ws.send(res);
