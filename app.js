@@ -42,6 +42,7 @@ wss.on("connection", function connection(ws) {
      * two-player game: every two players are added to the same game
      * cd \CSE\Year1-Q2\CSE1500\web\myapp
      */
+    var currentGame;
     var player = {};
     player.name = "player " + ind;
     ind++;
@@ -56,7 +57,7 @@ wss.on("connection", function connection(ws) {
 
     players.forEach(function(p) {
         if(p.status == 'searching' && p.name != player.name){
-            var currentGame = initialiseGame(p, player); 
+            currentGame = initialiseGame(p, player); 
         }
     });
     
@@ -96,11 +97,11 @@ wss.on("connection", function connection(ws) {
              * code 1001 means almost always closing initiated by the client;
              * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
             */
-           console.log("Game %s end.", newPlayer.id);
+           console.log("Game %s end.", currentGame.index);
             if (code == "1001"){
                 currentGame.setState("DISCONNECTED");
-                console.log(ws.id + " disconnected ...");
-                console.log(currentGame.id + "disconnected.");
+                console.log(currentGame.index + " disconnected ...");
+                console.log(currentGame.index + "disconnected.");
                 if (oMsg.type === "GAME-ABORTED"){
                     if (currentGame.setter !== null){
                         currentGame.setter.close();
