@@ -52,7 +52,7 @@ wss.on("connection", function connection(ws) {
 
     console.log(player.name + " connected.");
     
-    var res = JSON.stringify({status:"searching",message: "Looking for an opponent..."});
+    var res = JSON.stringify({status:"searching",message: "Looking for an opponent...."});
     ws.send(res);
 
     players.forEach(function(p) {
