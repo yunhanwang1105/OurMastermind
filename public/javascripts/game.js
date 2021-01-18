@@ -141,7 +141,7 @@ function selectCodeColor(color) {
         boardSelector.appendChild(codeInnerBoard);
 
         // clear innerboard, reuse
-        codeInnerBoard = createElement("div");
+        codeInnerBoard = document.createElement("div");
 
         // inform serve that code is given
         socket.send(messages.CODEGIVEN);
