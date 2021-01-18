@@ -52,13 +52,14 @@ var socket = new WebSocket("ws://localhost:3000");
 // connection
 socket.onmessage = function (msg) { 
     console.log("message recieved");
+    console.log(msg);
 
-    let incomingMessage = JSON.parse(msg);
+    let incomingMessage = JSON.parse(msg.data);
 
     console.log(incomingMessage);
 
     // assign role to the current HTML user
-    if (incomingMessage.data === "CodeSetter") {
+    if (incomingMessage.role === "CodeSetter") {
         role = "CodeSetter";
 
         checkBtnSelector.addEventListener("click", () => checkHints());
@@ -309,7 +310,7 @@ function selectGuessColor(color) {
 
 function checkColor(){
     if (currentGuessCode.length < 4){
-        windows.alert("You have to choose 4 colours.");
+        window.alert("You have to choose 4 colours.");
     } else{
 
 
@@ -318,7 +319,7 @@ function checkColor(){
         boardSelector.appendChild(codeInnerBoard);
 
         // clear innerboard, reuse
-        codeInnerBoard = createElement("div");
+        codeInnerBoard = document.createElement("div");
 
         // inform serve that color guess is given
         let msg = messages.GUESS_MADE;

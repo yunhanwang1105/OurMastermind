@@ -41,9 +41,9 @@ function initialiseGame(p1, p2){
     
     console.log("game " + Game.index + " started, Game info:\nSetter: " + Game.setter +"\nGuesser: " + Game.guesser);
 
-    var res = {player: 1, data: "CodeSetter",status: "started"};
+    var res = {player: 1, role: "CodeSetter",status: "started"};
     p1.ws.send(JSON.stringify(res));
-    res = {player:2, data: "CodeGuesser", status: "started"};
+    res = {player:2, role: "CodeGuesser", status: "started"};
     p2.ws.send(JSON.stringify(res));
 
     gameStats.gamesOngoing++;
