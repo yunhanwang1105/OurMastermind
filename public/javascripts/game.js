@@ -147,7 +147,7 @@ socket.onmessage = function (msg) {
     if (incomingMessage.type === "SETTER-WIN") {
         anouncementSelector.innerHTML = "Setter wins!";
         setterScore++;
-        
+
         let scoreboardSelector = document.querySelector(".scoreboard").innerHTML = setterScore + " : " + guesserScore;
 
     }
@@ -163,7 +163,7 @@ function selectCodeColor(color) {
     div.classList.add("code-selection-item");
     div.classList.add(color);
 
-    this.codeInnerBoard.appendChild(div);
+    this.codeInnerBoard.append(div);
 
     // make color visible on current selection
     currentSelectionSelector.appendChild(div);
